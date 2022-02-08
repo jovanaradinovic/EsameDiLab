@@ -69,8 +69,20 @@ class CSVTimeSeriesFile:
         return complete_list
 
 def compute_avg_monthly_difference(time_series,first_year,last_year):
-    
+    if(last_year > time_series[-1][0][:4]):
+        raise ExamException("Error: last_year non è presente in data.csv file")
+    if(first_year < time_series[0][0][:4]):
+        raise ExamException("Error: first_year non è presente in the data.csv file")    
+    if first_year == last_year:
+        raise ExamException("Primo e secondo anno sono uguali")    
+    if not isinstance(time_series, list):
+        raise ExamException(f"Error: parameter 'time_series' deve essere una lista e non '{type(time_series)}'") 
+    if type(first_year) is not str:
+        raise ExamException(f"First_year non è un valore computabile. Tipo di dato inserito: {type(first_year)}")  
+    if type(last_year) is not str:
+        raise ExamException(f"Last_year non è un valore computabile. Tipo di dato inserito: {type(last_year)}")         
     pass
+
 def main():
     pass
 
