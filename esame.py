@@ -5,8 +5,9 @@ class ExamException(Exception): #classe per le eccezioni
 
     pass
  
-class CSVTimeSeriesFile:
+class CSVTimeSeriesFile: 
     def __init__ (self,name):
+        self.name=name
         if not isinstance(name, str):
             raise ExamException(f"Error: parametro 'name' deve essere una stringa e non '{type(name)}'")
         pass
@@ -69,6 +70,7 @@ class CSVTimeSeriesFile:
         return complete_list
 
 def compute_avg_monthly_difference(time_series,first_year,last_year):
+    
     if(last_year > time_series[-1][0][:4]):
         raise ExamException("Error: last_year non è presente in data.csv file")
     if(first_year < time_series[0][0][:4]):
@@ -82,6 +84,9 @@ def compute_avg_monthly_difference(time_series,first_year,last_year):
     if type(last_year) is not str:
         raise ExamException(f"Last_year non è un valore computabile. Tipo di dato inserito: {type(last_year)}")         
     pass
+
+
+
 
 def main():
     pass
