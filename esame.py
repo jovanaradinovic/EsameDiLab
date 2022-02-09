@@ -5,9 +5,9 @@ class ExamException(Exception): #classe per le eccezioni
 
     pass
  
-class CSVTimeSeriesFile: 
+class CSVTimeSeriesFile:
     def __init__ (self,name):
-        self.name=name
+        self.name = name
         if not isinstance(name, str):
             raise ExamException(f"Error: parametro 'name' deve essere una stringa e non '{type(name)}'")
         pass
@@ -70,7 +70,6 @@ class CSVTimeSeriesFile:
         return complete_list
 
 def compute_avg_monthly_difference(time_series,first_year,last_year):
-    
     if(last_year > time_series[-1][0][:4]):
         raise ExamException("Error: last_year non è presente in data.csv file")
     if(first_year < time_series[0][0][:4]):
@@ -83,9 +82,39 @@ def compute_avg_monthly_difference(time_series,first_year,last_year):
         raise ExamException(f"First_year non è un valore computabile. Tipo di dato inserito: {type(first_year)}")  
     if type(last_year) is not str:
         raise ExamException(f"Last_year non è un valore computabile. Tipo di dato inserito: {type(last_year)}")         
-    pass
+    
+    data = [int(i[1]) for i in time_series if int(i[0][:4]) >= int(first_year) and int(i[0][:4]) <= int(last_year)]
+    years = int(last_year)-int(first_year)+1
+    result = [[]for i in range(0,years)]    
 
+    conta = 0
 
+    for i in range(0,len(data)):
+        if i != 0 and i % 12 == 0: 
+                conta+=1
+        result[conta].append(data[i])
+
+    avg = []
+    somma = 0
+    conta = 0
+    for i in range(0,12):
+        for j in range(1,years):
+            if (result[j][i] == 0 or result[j-1][i] == 0) and years == 2:
+                somma = 0
+            else: 
+                if (result[j][i] == 0 or result[j-1][i] == 0) and years > 2:
+                    conta += 1
+                    if(conta - years < 2):
+                        somma = 0
+                        j = years
+                    else:
+                        somma += 0
+                else:
+                    somma += result[j][i] - result[j-1][i]
+        avg.append(somma/(years-1))
+        somma = 0
+    
+    return avg
 
 
 def main():
